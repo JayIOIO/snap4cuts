@@ -37,7 +37,7 @@ section{display:none;max-width:1000px;margin:0 auto;padding:16px 16px 48px}secti
 .pick b{position:absolute;top:-6px;right:-6px;background:var(--pink);color:#1E1E24;border:2px solid var(--ink);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;font-size:13px}
 .sw{width:38px;height:38px;border:2px solid var(--ink);border-radius:50%;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}.sw.on{outline:3px solid var(--pink);outline-offset:2px}
 .stk{font-size:26px;padding:4px 8px}
-#cv{width:100%;max-width:330px;display:block;margin:auto;border:2px solid var(--ink);box-shadow:var(--sh);touch-action:none;background:#fff}
+#cv{width:100%;max-width:330px;display:block;margin:auto;border:2px solid var(--ink);box-shadow:var(--sh);background:#fff}
 #prev{width:200px;border:2px solid var(--ink);background:#fff;box-shadow:var(--sh);padding:10px;display:flex;flex-direction:column;gap:8px}
 #prev .pg{flex:1;display:grid;gap:8px}#prev .pg div{background:linear-gradient(135deg,var(--pink),var(--yel));border:2px solid #1E1E24;display:grid;place-items:center;font:700 22px Fredoka;color:#1E1E24}
 #prev .pf{text-align:center;font:700 12px 'Space Mono';color:#1E1E24;height:30px}
@@ -167,7 +167,8 @@ function initStudio(){if(!S.photos.length){toast('Take or upload photos first.')
 let drag=null;const cv=$('#cv');
 cv.onpointerdown=e=>{const r=cv.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*cv.width,py=(e.clientY-r.top)/r.height*cv.height;S.act=-1;for(let i=S.st.length-1;i>=0;i--){const s=S.st[i];if(Math.abs(px-s.x*cv.width)<s.bw/2&&Math.abs(py-s.y*cv.height)<s.bh/2){S.act=i;drag={dx:s.x-px/cv.width,dy:s.y-py/cv.height};cv.setPointerCapture(e.pointerId);break}}redraw()};
 cv.onpointermove=e=>{if(!drag||S.act<0)return;const r=cv.getBoundingClientRect(),s=S.st[S.act];s.x=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width+drag.dx));s.y=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height+drag.dy));redraw()};
-cv.onpointerup=()=>drag=null;
+cv.onpointerup=cv.onpointercancel=()=>drag=null;
+cv.addEventListener('touchstart',e=>{if(drag)e.preventDefault()},{passive:false});
 
 /* export */
 function initExport(){const c=document.createElement('canvas'),g=GEO[S.layout];c.width=g.W;c.height=g.H;draw(c.getContext('2d'),true);S.url=c.toDataURL('image/png');const f=$('#fin');f.style.animation='none';f.src=S.url;void f.offsetWidth;f.style.animation='';[0,1,2,3,4].forEach(i=>setTimeout(()=>beep(300+i*20,.1,'sawtooth',.03),i*500))}
