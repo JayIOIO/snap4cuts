@@ -25,7 +25,7 @@ section{display:none;max-width:1000px;margin:0 auto;padding:16px 16px 48px}secti
 .sway{animation:sway 3s ease-in-out infinite alternate;transform-origin:top center}@keyframes sway{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
 .mq{overflow:hidden;padding:20px 0}.mq>div{display:flex;gap:22px;width:max-content;animation:mq 30s linear infinite}@keyframes mq{to{transform:translateX(-50%)}}
 .steps{display:grid;gap:12px}@media(min-width:601px){.steps{grid-template-columns:repeat(3,1fr);gap:14px}}
-.cam{position:relative;aspect-ratio:var(--ar);background:#000;border:2px solid var(--ink);border-radius:14px;overflow:hidden;max-height:58vh;max-height:58dvh;margin:auto;box-shadow:var(--sh)}
+.cam{position:relative;aspect-ratio:var(--ar);background:#000;border:2px solid var(--ink);border-radius:14px;overflow:hidden;max-height:50vh;max-height:50dvh;margin:auto;box-shadow:var(--sh)}
 .cam video,.cam #shotImg,.demo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#shotImg{display:none}
 .demo{display:none;place-items:center;font-size:30vmin;background:linear-gradient(135deg,var(--pink),var(--yel))}
 .cd{position:absolute;inset:0;display:grid;place-items:center;font:700 min(38vw,150px) Fredoka;color:#fff;text-shadow:5px 5px 0 #1E1E24}
@@ -37,13 +37,16 @@ section{display:none;max-width:1000px;margin:0 auto;padding:16px 16px 48px}secti
 .pick b{position:absolute;top:-6px;right:-6px;background:var(--pink);color:#1E1E24;border:2px solid var(--ink);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;font-size:13px}
 .sw{width:38px;height:38px;border:2px solid var(--ink);border-radius:50%;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}.sw.on{outline:3px solid var(--pink);outline-offset:2px}
 .stk{font-size:26px;padding:4px 8px}
-#cv{width:100%;max-width:330px;display:block;margin:auto;border:2px solid var(--ink);box-shadow:var(--sh);background:#fff}
+#cv{width:auto;max-width:100%;max-height:60vh;max-height:60dvh;display:block;margin:auto;border:2px solid var(--ink);box-shadow:var(--sh);background:#fff}
 #prev{width:200px;border:2px solid var(--ink);background:#fff;box-shadow:var(--sh);padding:10px;display:flex;flex-direction:column;gap:8px}
 #prev .pg{flex:1;display:grid;gap:8px}#prev .pg div{background:linear-gradient(135deg,var(--pink),var(--yel));border:2px solid #1E1E24;display:grid;place-items:center;font:700 22px Fredoka;color:#1E1E24}
 #prev .pf{text-align:center;font:700 12px 'Space Mono';color:#1E1E24;height:30px}
 .slot{width:min(300px,80vw);margin:20px auto;overflow:hidden;padding-bottom:14px;border-bottom:14px solid var(--ink);border-radius:0 0 8px 8px}
 #fin{width:100%;display:block;border:2px solid var(--ink);animation:out 3s cubic-bezier(.3,.7,.2,1) both}@keyframes out{from{transform:translateY(-102%)}}
-@media(max-width:760px){section{padding:12px 14px 40px}#p1 .btn.p{width:100%}.row .btn{flex:1 1 140px}#hero{padding:6px 0!important}h2{font-size:26px}}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;margin:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:2px solid var(--ink);flex-wrap:nowrap}
+.dock .btn{flex:1;padding:12px 8px}
+@media(max-width:760px){section{padding:12px 14px 40px}#p2,#p3,#p4{padding-bottom:110px}#p1 .btn.p{width:100%}.row .btn{flex:1 1 140px}.dock .btn{flex:1 1 0}#hero{padding:6px 0!important}h2{font-size:26px}.pick{flex-wrap:nowrap;overflow-x:auto;padding:8px 6px}.pick div{flex:none}.sw{width:44px;height:44px}#toast{bottom:calc(90px + env(safe-area-inset-bottom,0px))}}
+@media(min-width:761px){.dock{position:static;padding:0;border:0;background:none}.dock .btn{flex:0 0 auto;padding:12px 20px}#cv{width:100%;max-width:330px;max-height:none}}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;z-index:9;display:none;max-width:90vw}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style></head><body>
@@ -57,13 +60,13 @@ section{display:none;max-width:1000px;margin:0 auto;padding:16px 16px 48px}secti
 <h2>Wall of fame</h2><div class="mq"><div id="wall"></div></div>
 </section>
 
-<section id="p2"><div class="two"><div><h2>Pick your layout</h2><div class="row" id="lay"></div><h3>Shot count</h3><div class="row" id="shotsRow"></div><p id="layNote"></p><div class="row"><button class="btn" onclick="go(1)">Back</button><button class="btn p" onclick="go(3)">Next: camera</button></div></div>
+<section id="p2"><div class="two"><div><h2>Pick your layout</h2><div class="row" id="lay"></div><h3>Shot count</h3><div class="row" id="shotsRow"></div><p id="layNote"></p><div class="row dock"><button class="btn" onclick="go(1)">Back</button><button class="btn p" onclick="go(3)">Next: camera</button></div></div>
 <div style="display:grid;place-items:center"><div id="prev"></div></div></div></section>
 
 <section id="p3"><h2>Strike a pose</h2><div class="two"><div><div class="cam" id="cam"><video id="vid" playsinline muted></video><div class="demo" id="demo">😎</div><img id="shotImg" alt=""><div class="flash" id="flash"></div><div class="cd" id="cd"></div></div></div>
 <div class="card"><div id="prog" class="row"></div><b id="progT"></b>
 <h3>Timer</h3><div class="row" id="timers"></div><h3>Filter</h3><div class="row" id="filters"></div><div class="row" id="mirrorRow"></div>
-<div class="row"><button class="btn b" id="startBtn" onclick="run()">Auto-shoot</button><button class="btn p" onclick="manual()">📸 Shutter</button><button class="btn" onclick="go(2)">Back</button></div><div class="row"><button class="chip" onclick="flip()">Flip camera</button><label class="chip">Phone camera<input type="file" id="nat" accept="image/*" capture="user" hidden></label><span class="mono" style="font-size:12px">Tip: press Space to snap</span></div>
+<div class="row dock"><button class="btn b" id="startBtn" onclick="run()">Auto-shoot</button><button class="btn p" onclick="manual()">📸 Shutter</button><button class="btn" onclick="go(2)">Back</button></div><div class="row"><button class="chip" onclick="flip()">Flip camera</button><label class="chip">Phone camera<input type="file" id="nat" accept="image/*" capture="user" hidden></label><span class="mono" style="font-size:12px">Tip: press Space to snap</span></div>
 <div class="row"><button class="chip" onclick="demoOn()">Demo mode</button><label class="chip">Upload photos<input type="file" id="up" accept="image/*" multiple hidden></label><button class="btn b" onclick="camOn()">📷 Camera on</button></div>
 <div class="film" id="film"></div></div></div></section>
 
@@ -72,7 +75,7 @@ section{display:none;max-width:1000px;margin:0 auto;padding:16px 16px 48px}secti
 <div class="card"><h3>Frame</h3><div class="row" id="solids"></div><div class="row" id="pats"></div></div>
 <div class="card"><h3>Stickers (drag on the strip)</h3><div class="row" id="stks"></div><div class="row"><button class="chip" onclick="sz(1.2)">Bigger</button><button class="chip" onclick="sz(1/1.2)">Smaller</button><button class="chip" onclick="del()">Delete</button><button class="chip" onclick="S.st=[];S.act=-1;redraw()">Clear all</button></div></div>
 <div class="card"><h3>Caption</h3><input id="cap" style="width:100%;padding:10px;border:2px solid var(--ink);border-radius:10px;font:700 16px 'Space Mono';background:var(--card);color:var(--ink)"><div class="row" id="fonts"></div><div class="row" id="cols"></div></div>
-<div class="row"><button class="btn" onclick="go(3)">Retake</button><button class="btn p" onclick="go(5)">Print my strip</button></div></div></div></section>
+<div class="row dock"><button class="btn" onclick="go(3)">Retake</button><button class="btn p" onclick="go(5)">Print my strip</button></div></div></div></section>
 
 <section id="p5"><h2 style="text-align:center">Your strip is printing…</h2><div class="slot"><img id="fin" alt="Your finished photo strip"></div>
 <p style="text-align:center" class="mono">If the download is blocked here, press and hold or right-click the strip to save it.</p>
